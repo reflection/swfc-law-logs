@@ -3,7 +3,7 @@ import json
 actions = {}
 charges = {}
 
-with open('law_battle.json', 'r') as f:
+with open('logs/law_battle.json', 'r') as f:
   for line in f:
     d = json.loads(line)
 

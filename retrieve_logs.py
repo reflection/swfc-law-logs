@@ -25,7 +25,7 @@ data = {
 
 url = 'http://amw.konaminet.jp/amw/naboo/api/guild/event/warship_combat/reload?' + urlencode(q)
 
-with open('law_battle.json', 'wb') as f:
+with open('logs/law_battle.json', 'wb') as f:
   while True:
     r = requests.post(url, data=data, headers=h_post, allow_redirects=True)
     f.write(r.content)
