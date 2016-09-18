@@ -30,4 +30,4 @@ with open('logs/law_battle.json', 'wb') as f:
     r = requests.post(url, data=data, headers=h_post, allow_redirects=True)
     f.write(r.content)
     f.write('\n'.encode('utf-8'))
-    sleep(1)
+    sleep(0.5)
