@@ -1,3 +1,4 @@
+import re
 import json
 
 actions = {}
@@ -36,8 +37,11 @@ launches = {
   '1': {},
   '0': {}
 }
+targets = {}
 legion = ''
 opponent = ''
+off_wins = 0
+off_losses = 0
 
 with open('logs/law_results.json', 'r') as f:
   for line in f:
@@ -80,27 +84,42 @@ for action, ts in actions.items():
       minute = '5'
     else:
       minute = str(minute)
-    if sf in launches[minute]:
-      if sub:
-        launches[minute][sf] -= 1
-      else:
-        launches[minute][sf] += 1
+    if sf not in launches[minute]:
+      launches[minute][sf] = 0
+
+    if sub:
+      launches[minute][sf] -= 1
     else:
-      if sub:
-        launces[minute][sf] = 0
-      else:
-        launches[minute][sf] = 1
+      launches[minute][sf] += 1
   else:
+    m = re.search('targeting the (.+?),', action)
+    if m:
+      target = m.group(1)
+      if target not in targets:
+        targets[target] = 0
+      targets[target] += 1
+
+    m = re.search('action (.+)', action)
+    if m:
+      res = m.group(1)
+      if res == 'was successful':
+        off_wins += 1
+      else:
+        off_losses += 1
+
     boards.append((ts, '{}'.format(action)))
 
+
+print('{} vs {} Boarding Logs'.format(legion, opponent))
+for ts, event in sorted(boards, key=lambda x:-x[0]):
+  print('{}:{:02d} - {}'.format(int(ts / 60), ts % 60, event))
+print('')
+print('Total Boards - {}  * Not all may be captured in logs'.format(num_boards))
+print('Targets - {}'.format(', '.join(['{}: {}'.format(target, num) for target, num in targets.items()])))
+print('Logs - Wins: {}  Losses: {}  Win %: {:.2f}'.format(off_wins, off_losses, (off_wins / (off_wins + off_losses)) * 100))
+print('')
 print('{} vs {} Starfighter Logs'.format(legion, opponent))
 print('5:00 to 3:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['5'].items()])))
 print('2:59 to 2:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['2'].items()])))
 print('1:59 to 1:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['1'].items()])))
 print('0:59 to 0:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['0'].items()])))
-
-print('\n{} vs {} Boarding Logs'.format(legion, opponent))
-for ts, event in sorted(boards, key=lambda x:-x[0]):
-  print('{}:{:02d} - {}'.format(int(ts / 60), ts % 60, event))
-
-print('total boards: {}\n\n'.format(num_boards))
