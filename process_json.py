@@ -114,7 +114,7 @@ print('{} vs {} Boarding Logs'.format(legion, opponent))
 for ts, event in sorted(boards, key=lambda x:-x[0]):
   print('{}:{:02d} - {}'.format(int(ts / 60), ts % 60, event))
 print('')
-print('Total Boards - {}  * Not all may be captured in logs'.format(num_boards))
+print('Total Boards - {}  * Logs may not reflect all boards (KONAMI!!)'.format(num_boards))
 print('Targets - {}'.format(', '.join(['{}: {}'.format(target, num) for target, num in targets.items()])))
 print('Logs - Wins: {}  Losses: {}  Win %: {:.2f}'.format(off_wins, off_losses, (off_wins / (off_wins + off_losses)) * 100))
 print('')
