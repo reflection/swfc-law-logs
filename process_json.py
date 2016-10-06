@@ -2,7 +2,7 @@ import json
 
 actions = {}
 charges = {}
-boards = 0
+num_boards = 0
 
 with open('logs/law_battle.json', 'r') as f:
   for line in f:
@@ -10,8 +10,6 @@ with open('logs/law_battle.json', 'r') as f:
 
     for h in d['history']:
       if h['action'].find('charged') > -1:
-        continue
-      if h['action'].find('launch') > -1:
         continue
       if h['action'].find('issued an order') > -1:
         continue
@@ -28,13 +26,18 @@ with open('logs/law_battle.json', 'r') as f:
       if action not in actions and 'date' in h:
         actions[action] = d['base_info']['turn_resttime'] - h['date']
 
-    if int(d['abordage_cnt']) > boards:
-      boards = int(d['abordage_cnt'])
+    if int(d['abordage_cnt']) > num_boards:
+      num_boards = int(d['abordage_cnt'])
 
-out = []
+boards = []
+launches = {
+  '5': {},
+  '2': {},
+  '1': {},
+  '0': {}
+}
 legion = ''
 opponent = ''
-combat_logs = []
 
 with open('logs/law_results.json', 'r') as f:
   for line in f:
@@ -55,23 +58,49 @@ with open('logs/law_results.json', 'r') as f:
       if action not in actions and 'date' in h:
         actions[action] = h['date']
 
-    for c in d['combat_log']:
-      if c['is_owner']:
-        combat_logs.append('Legion: {}'.format(' '.join(c['texts'])))
-      else:
-        combat_logs.append('Opponent: {}'.format(' '.join(c['texts'])))
-
 for action, ts in actions.items():
   action = action.replace('<color=#35FC00>', '')
   action = action.replace('<color=#FF7800>', '')
   action = action.replace('</color>', '')
-  out.append((ts, '{}'.format(action)))
+  add_idx = action.find('preparing to launch')
+  sub_idx = action.find('cancelled launching')
+  if add_idx + sub_idx > -2:
+    add = False
+    sub = False
+    if add_idx > -1:
+      add = True
+      idx = add_idx
+    else:
+      sub = True
+      idx = sub_idx
 
-for ts, event in sorted(out, key=lambda x:-x[0]):
+    sf = action[idx+20:-1]
+    minute = int(ts / 60)
+    if minute >= 3:
+      minute = '5'
+    else:
+      minute = str(minute)
+    if sf in launches[minute]:
+      if sub:
+        launches[minute][sf] -= 1
+      else:
+        launches[minute][sf] += 1
+    else:
+      if sub:
+        launces[minute][sf] = 0
+      else:
+        launches[minute][sf] = 1
+  else:
+    boards.append((ts, '{}'.format(action)))
+
+print('{} vs {} Starfighter Logs'.format(legion, opponent))
+print('5:00 to 3:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['5'].items()])))
+print('2:59 to 2:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['2'].items()])))
+print('1:59 to 1:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['1'].items()])))
+print('0:59 to 0:00 - {}'.format(', '.join(['{}: {}'.format(sf, num) for sf, num in launches['0'].items()])))
+
+print('\n{} vs {} Boarding Logs'.format(legion, opponent))
+for ts, event in sorted(boards, key=lambda x:-x[0]):
   print('{}:{:02d} - {}'.format(int(ts / 60), ts % 60, event))
 
-print('total boards: {}\n\n'.format(boards))
-print('{} vs {} combat logs'.format(legion, opponent))
-for c in combat_logs:
-  print(c)
-  print('\n')
+print('total boards: {}\n\n'.format(num_boards))
