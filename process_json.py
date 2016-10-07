@@ -98,6 +98,7 @@ for action, ts in actions.items():
       if target not in targets:
         targets[target] = 0
       targets[target] += 1
+      off_wins += 1
 
     m = re.search('action (.+)', action)
     if m:
