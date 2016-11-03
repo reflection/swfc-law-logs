@@ -8,8 +8,8 @@ h_post = {
   'Connection': 'keep-alive',
   'Proxy-Connection': 'keep-alive',
   'Content-Type': 'application/x-www-form-urlencoded',
-  'User-Agent': 'SWFC-U/n/4.3.14/[iPhone OS 9.3.3]/[iPad5,3]',
-  'X-Unity-Version': '4.7.2f1'
+  'User-Agent': 'SWFC-U/n/5.0.16/[iPhone OS 9.3.3]/[iPad5,3]',
+  'X-Unity-Version': '5.3.5p5'
 }
 # Insert values for your current swfc session
 q = {
@@ -17,9 +17,9 @@ q = {
   'opensocial_viewer_id': ''
 }
 data = {
-  'version': 43,
-  'division': 3,
-  'section': 1,
+  'version': 45,
+  'division': 1,
+  'section': 2,
   'turn': 1
 }
 
@@ -30,4 +30,4 @@ with open('logs/law_results.json', 'wb') as f:
     r = requests.post(url, data=data, headers=h_post, allow_redirects=True)
     f.write(r.content)
     f.write('\n'.encode('utf-8'))
-    sleep(1)
+    sleep(0.5)
