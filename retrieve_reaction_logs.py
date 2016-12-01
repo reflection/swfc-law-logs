@@ -17,9 +17,9 @@ q = {
   'opensocial_viewer_id': ''
 }
 data = {
-  'version': 45,
+  'version': 46,
   'division': 1,
-  'section': 2,
+  'section': 1,
   'turn': 1
 }
 
