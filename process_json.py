@@ -5,6 +5,19 @@ actions = {}
 charges = {}
 num_boards = 0
 
+def shorten_action(action):
+  idx = action.find('... (Received')
+  if idx > -1:
+    action = action[:idx]
+  idx = action.find('Action!')
+  if idx > -1:
+    action = action[:idx+6]
+  idx = action.find('successful!')
+  if idx > -1:
+    action = action[:idx+10]
+
+  return action
+
 with open('logs/law_battle.json', 'r') as f:
   for line in f:
     d = json.loads(line)
@@ -17,13 +30,8 @@ with open('logs/law_battle.json', 'r') as f:
       if h['action'].find('initiated') > -1:
         continue
 
-      action = h['action']
-      idx = action.find('... (Received')
-      if idx > -1:
-        action = action[:idx]
-      idx = action.find('successful!')
-      if idx > -1:
-        action = action[:idx+10]
+      action = shorten_action(h['action'])
+
       if action not in actions and 'date' in h:
         actions[action] = d['base_info']['turn_resttime'] - h['date']
 
@@ -51,13 +59,7 @@ with open('logs/law_results.json', 'r') as f:
     opponent = d['enemy_guild_info']['guild_info']['name']
 
     for h in d['history']:
-      action = h['action']
-      idx = action.find('... (Received')
-      if idx > -1:
-        action = action[:idx]
-      idx = action.find('Action!')
-      if idx > -1:
-        action = action[:idx+6]
+      action = shorten_action(h['action'])
 
       if action not in actions and 'date' in h:
         actions[action] = h['date']
