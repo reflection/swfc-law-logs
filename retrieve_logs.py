@@ -8,7 +8,7 @@ h_post = {
   'Connection': 'keep-alive',
   'Proxy-Connection': 'keep-alive',
   'Content-Type': 'application/x-www-form-urlencoded',
-  'User-Agent': 'SWFC-U/n/5.0.16/[iPhone OS 9.3.3]/[iPad5,3]',
+  'User-Agent': 'SWFC-U/w/5.2.3/[iPhone OS 9.3.3]/[iPad5,3]',
   'X-Unity-Version': '5.3.5p5'
 }
 # Insert values for your current swfc session
@@ -17,13 +17,13 @@ q = {
   'opensocial_viewer_id': ''
 }
 data = {
-  'version': 47,
+  'version': 49,
   'division': 1,
-  'section': 2,
+  'section': 1,
   'turn': 1
 }
 
-url = 'http://amw.konaminet.jp/amw/naboo/api/guild/event/warship_combat/reload?' + urlencode(q)
+url = 'https://amw.s.konaminet.jp/amw/naboo/api/guild/event/warship_combat/reload?' + urlencode(q)
 
 with open('logs/law_battle.json', 'wb') as f:
   while True:
