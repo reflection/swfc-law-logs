@@ -19,6 +19,6 @@ q = {
 }
 
 url = 'https://amw.s.konaminet.jp/amw/naboo/api/guild/event/warship_combat/warship_combat_battle?' + urlencode(q)
-with open('logs/law_sfs.json', 'wb') as f:
+with open('logs/law_sfs_1.json', 'wb') as f:
   r = requests.get(url, headers=h_get, allow_redirects=True)
   f.write(r.content)
