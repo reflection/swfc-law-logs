@@ -8,8 +8,8 @@ h_post = {
   'Connection': 'keep-alive',
   'Proxy-Connection': 'keep-alive',
   'Content-Type': 'application/x-www-form-urlencoded',
-  'User-Agent': 'SWFC-U/w/5.4.2/[iPhone OS 9.3.3]/[iPad5,3]',
-  'X-Unity-Version': '5.3.7p4'
+  'User-Agent': 'SWFC-U/w/6.0.2/[iPhone OS 9.3.3]/[iPad5,3]',
+  'X-Unity-Version': '5.6.1p1'
 }
 # Insert values for your current swfc session
 q = {
@@ -17,7 +17,7 @@ q = {
   'opensocial_viewer_id': ''
 }
 data = {
-  'version': 55,
+  'version': 57,
   'division': 1,
   'section': 1,
   'turn': 1
